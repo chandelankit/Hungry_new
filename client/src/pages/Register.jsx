@@ -13,6 +13,7 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Paper from '@mui/material/Paper';
+import axios from "axios";
 
 function Copyright(props) {
   return (
@@ -32,13 +33,22 @@ function Copyright(props) {
 const defaultTheme = createTheme();
 
 export default function SignUp() {
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get('email'),
-      password: data.get('password'),
-    });
+    const obj = {
+      fullName: data.get("fullName"),
+      email: data.get("email"),
+      mobileNo: data.get("mobileNo"),
+      password: data.get("password")
+    };
+
+    try {
+      const response = await axios.post('/api/users/register', obj);
+      console.log('Response:', response.data);
+    } catch (error) {
+      console.error('Error:', error);
+    }
   };
 
   return (
@@ -133,10 +143,10 @@ export default function SignUp() {
                 <TextField
                   required
                   fullWidth
-                  name="phoneNo"
-                  label="Phone No."
+                  name="mobileNo"
+                  label="Mobile No."
                   type="number"
-                  id="phoneNo"
+                  id="mobileNo"
                 />
               </Grid>
             </Grid>
