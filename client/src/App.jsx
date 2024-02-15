@@ -2,6 +2,8 @@ import { Route, BrowserRouter as Router, Routes, useLocation } from 'react-route
 import Navbar from './components/Navbar';
 import { About, Home, Login,Register} from './pages';
 import Footer from './components/footer';
+import DFood from './pages/DFood';
+import RFood from './pages/RFood';
 
 const App = () => {
   return (
@@ -29,6 +31,8 @@ const AppContent = () => {
         <Route path='/' element={<Home />} />
         <Route path='/login' element={<Login />} />
         <Route path='/register' element={<Register />} />
+        <Route path='/DFood' element={<DFood />} />
+        <Route path='/RFood' element={<RFood />} />
       </Routes>
       <Footer/>
     </>
