@@ -1,6 +1,7 @@
 import { Route, BrowserRouter as Router, Routes, useLocation } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import { About, Home, Login,Register} from './pages';
+import Footer from './components/footer';
 
 const App = () => {
   return (
@@ -29,6 +30,7 @@ const AppContent = () => {
         <Route path='/login' element={<Login />} />
         <Route path='/register' element={<Register />} />
       </Routes>
+      <Footer/>
     </>
   );
 };

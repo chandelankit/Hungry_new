@@ -50,7 +50,7 @@ export default function SignIn() {
       const response = await axios.post('/api/users/login', obj);
       console.log('Response:', response.data);
     } catch (error) {
-      console.error('Error:', error);
+      console.error('Error:', error.message);
     }
   }
   return (

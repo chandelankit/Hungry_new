@@ -47,7 +47,7 @@ export default function SignUp() {
       const response = await axios.post('/api/users/register', obj);
       console.log('Response:', response.data);
     } catch (error) {
-      console.error('Error:', error);
+      console.error('Error:',error.message);
     }
   };
 

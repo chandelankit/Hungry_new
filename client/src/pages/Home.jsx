@@ -1,9 +1,21 @@
-import React from 'react'
+import { Container } from "postcss";
+import React from "react";
+import { Button } from "@mui/material";
 
+import Hero from "@/components/Hero";
+import Services from "@/components/services";
+
+import Timeliness from "@/components/Timeline";
+import Whatwedo from "@/components/Whatwedo";
 const Home = () => {
   return (
-    <h1>Home</h1>
-  )
-}
+    <>
+      <Hero />
+      <Whatwedo />
+      <Services />
+      <Timeliness />
+    </>
+  );
+};
 
-export default Home
+export default Home;
