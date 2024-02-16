@@ -1,4 +1,4 @@
-import * as React from "react";
+import React,{useState,useEffect} from 'react'
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
@@ -13,7 +13,9 @@ import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import Paper from '@mui/material/Paper';
+import { useNavigate } from 'react-router-dom';
 import axios from "axios"
+import LoginIcon from '@mui/icons-material/Login'; 
 
 function Copyright(props) {
   return (
@@ -38,6 +40,27 @@ function Copyright(props) {
 const defaultTheme = createTheme();
 
 export default function SignIn() {
+  const navigate = useNavigate();
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [user, setUser] = useState(null);
+  useEffect(() => {
+    axios.post('/api/users/isloggedin',{},{withCredentials: true})
+    .then(response => {
+      if(response.data.data.verifiedObj.verified)
+      { 
+        console.log(response.data.data.user);
+        setIsLoggedIn(true);
+        setUser(response.data.data.user);
+      }
+      else{
+        console.log("Not logged In");
+      }
+    })
+    .catch(error => {
+      console.error('Error:', error);
+    });
+  }, [])
+  
   const handleSubmit = async (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
@@ -47,17 +70,25 @@ export default function SignIn() {
     };
 
     try {
-      const response = await axios.post('/api/users/login', obj);
-      console.log('Response:', response.data);
+      const response = await axios.post('/api/users/login', obj, { withCredentials: true });
+      console.log(response);
+      navigate('/');
     } catch (error) {
       console.error('Error:', error.message);
-    }
+      alert("Invalid credentials");
+    }    
   }
   return (
     <Paper
             sx={{
-              backgroundColor: "white",
+              //Devesh Issue with Bg image Navbar area is diaplaying white check it 
+              // backgroundImage: `url("https://wallpaper-house.com/data/out/10/wallpaper2you_373651.jpg")`,
+              backgroundSize: 'cover',
+              backgroundRepeat: 'no-repeat',
+              backgroundPosition: 'center',
+              backgroundColor: "none", //white to none
               boxShadow: "none",
+              height: "100vh"
             }}
           >
     <ThemeProvider theme={defaultTheme}>
@@ -71,24 +102,34 @@ export default function SignIn() {
             alignItems: "center",
             bgcolor: "transparent",
             "& .MuiPaper-root": {
-              backgroundColor: "red",
+              backgroundColor: "transparent",
               boxShadow: "none", // Remove any box shadow
             },
           }}
         >
            
-          <Avatar sx={{ m: 1, bgcolor: "green" }}>
+          {/* <Avatar sx={{ m: 1, bgcolor: "green" }}>
             <LockOutlinedIcon />
           </Avatar>
           <Typography component="h1" variant="h5">
             Sign in
-          </Typography>
+          </Typography> */}
           <Box
             component="form"
             onSubmit={handleSubmit}
-            noValidate
-            sx={{ mt: 1 }}
+            sx={{mt: "17vh" }}
           >
+
+          <Grid container justifyContent="center">
+              <Grid item>
+                <Avatar sx={{ml:2.3,mb:1, bgcolor: "green" }}>
+                  <LockOutlinedIcon />
+                </Avatar>
+                <Typography component="h1" variant="h5" sx={{textAlign:"center"}}>
+                  Sign In
+                </Typography>
+              </Grid>
+            </Grid>
             <TextField
               margin="normal"
               required
@@ -98,6 +139,30 @@ export default function SignIn() {
               name="email"
               autoComplete="email"
               autoFocus
+              sx={{
+                '& .MuiOutlinedInput-root fieldset': {
+                borderColor: '#000',
+                },
+                "& .MuiOutlinedInput-root": {
+                '&.Mui-focused': {
+                  
+                  bgcolor: "#FFFFFF",
+                  borderWidth: "3px",
+                  
+                },   },
+                "&:hover": {
+                  "& .MuiOutlinedInput-notchedOutline": {
+                    borderColor: "#0892d0",
+                    borderWidth: "3px",
+                  },
+                },
+                "& .MuiInputLabel-outlined": {
+                  "&.Mui-focused": {
+                    color: "#0892d0",
+                    fontWeigth:"bold",
+                  },
+                },
+              }}
             />
             <TextField
               margin="normal"
@@ -115,7 +180,7 @@ export default function SignIn() {
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
             >
-              Sign In
+              Sign In <LoginIcon sx={{marginLeft: 1,}}/> {/*icon*/}
             </Button>
             <Grid container justifyContent="center">
               <Grid item>
@@ -126,7 +191,7 @@ export default function SignIn() {
             </Grid>
           </Box>
         </Box>
-        <Copyright sx={{ mt: 8, mb: 4 }} />
+        {/* <Copyright sx={{ mt: 8, mb: 4 }} /> */}
       </Container>
     </ThemeProvider>
   </Paper>

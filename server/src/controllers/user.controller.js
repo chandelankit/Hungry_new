@@ -384,6 +384,25 @@ const getWatchHistory = asyncHandler(async(req,res)=>{
         200,user[0].getWatchHistory,"Watch History sent successfully"
     ))
 })
+const isLoggedIn = asyncHandler(async(req,res)=>{
+    let verifiedObj = {verified: false}
+    let user = null;
+    if(req.cookies && req.cookies.accessToken){
+        const accessToken = req.cookies.accessToken;
+        const decodedToken = jwt.verify(accessToken, process.env.ACCESS_TOKEN_SECRET);
+        user = await User.findById(decodedToken?._id).select("-password -refreshToken");
+        if(user)
+        {
+            verifiedObj.verified =  true;
+        }
+    }
+    const resObj = {
+        user,verifiedObj
+    }
+    return res
+    .status(200)
+    .json(new ApiResponse(200,resObj,"Status Sent Successfully"));
+})
 export {
     home,
     registerUser,
@@ -396,5 +415,6 @@ export {
     updateAvatar,
     updateCoverImage,
     getUserChannelProfile,
-    getWatchHistory
+    getWatchHistory,
+    isLoggedIn
 }

@@ -1,4 +1,4 @@
-import * as React from "react";
+import React, { useEffect, useState } from "react";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
@@ -12,19 +12,53 @@ import Button from "@mui/material/Button";
 import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
 import AdbIcon from "@mui/icons-material/Adb";
-import { Link } from "react-router-dom"; // Import Link from react-router-dom
+import { Link, useNavigate } from "react-router-dom"; // Import Link from react-router-dom
+import axios from "axios"; // Import Axios for making HTTP requests
 
-const pages = [
+let pages = [
   { name: "Home", link: "/" },
   { name: "About", link: "/about" },
-  { name: "Login", link: "/login" },
 ];
 
 const settings = ["Profile", "Account", "Dashboard", "Logout"];
 
 function Navbar() {
+  const navigate = useNavigate();
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [user, setUser] = useState(null);
+
+  useEffect(() => {
+    axios
+      .post("/api/users/isloggedin", {}, { withCredentials: true })
+      .then((response) => {
+        if (response.data.data.verifiedObj.verified) {
+          console.log(response.data.data.user);
+          setIsLoggedIn(true);
+          setUser(response.data.data.user);
+        } else {
+          console.log("Not logged In");
+        }
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+      });
+  }); //scope of error
+
+  const handleLogout = () => {
+    setAnchorElNav(null);
+    axios
+      .post("/api/users/logout")
+      .then((response) => {
+        console.log("Logout Successfull");
+        setIsLoggedIn(false);
+      })
+      .catch((error) => {
+        // Handle error appropriately
+        console.error("Error logging out:", error);
+      });
+  };
 
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
@@ -113,6 +147,63 @@ function Navbar() {
                   </Link>
                 </MenuItem>
               ))}
+               {!isLoggedIn && (
+                <MenuItem onClick={handleCloseNavMenu}>
+                  <Link
+                    to={"/register"}
+                    style={{
+                      textDecoration: "none",
+                      color: "inherit",
+                      transition: "color 0.3s, background-color 0.3s", // Add transition for smooth effect
+                    }}
+                    hoverStyle={{
+                      // Use hoverStyle for pseudo-class hover effect
+                      color: "blue", // Change color on hover
+                      backgroundColor: "lightblue", // Change background color on hover
+                    }}
+                  >
+                    Register
+                  </Link>
+                </MenuItem>
+              )}
+              {!isLoggedIn && (
+                <MenuItem onClick={handleCloseNavMenu}>
+                  <Link
+                    to={"/login"}
+                    style={{
+                      textDecoration: "none",
+                      color: "inherit",
+                      transition: "color 0.3s, background-color 0.3s", // Add transition for smooth effect
+                    }}
+                    hoverStyle={{
+                      // Use hoverStyle for pseudo-class hover effect
+                      color: "blue", // Change color on hover
+                      backgroundColor: "lightblue", // Change background color on hover
+                    }}
+                  >
+                    Login
+                  </Link>
+                </MenuItem>
+              )}
+              
+
+              {isLoggedIn && (<MenuItem onClick={handleLogout}>
+                <Link
+                  to={"/logout"}
+                  style={{
+                    textDecoration: "none",
+                    color: "inherit",
+                    transition: "color 0.3s, background-color 0.3s", // Add transition for smooth effect
+                    ":hover": {
+                      // Pseudo-class for hover effect
+                      color: "blue", // Change color on hover
+                      backgroundColor: "lightblue", // Change background color on hover
+                    },
+                  }}
+                >
+                  Logout
+                </Link>
+              </MenuItem>)}
             </Menu>
           </Box>
           <Box sx={{ flexGrow: 1 }}></Box> {/* Empty Box for spacing */}
@@ -128,6 +219,30 @@ function Navbar() {
                 {page.name}
               </Button>
             ))}
+            {!isLoggedIn && (<Button
+              component={Link}
+              to={"/register"}
+              sx={{ my: 2, color: "white", display: "block" }}
+              onClick={handleCloseNavMenu}
+            >
+              Register
+            </Button>)}
+            {!isLoggedIn && (<Button
+              component={Link}
+              to={"/login"}
+              sx={{ my: 2, color: "white", display: "block" }}
+              onClick={handleCloseNavMenu}
+            >
+              Login
+            </Button>)}
+            {isLoggedIn && (<Button
+              component={Link}
+              to={"/logout"}
+              sx={{ my: 2, color: "white", display: "block" }}
+              onClick={handleLogout}
+            >
+              Logout
+            </Button>)}
           </Box>
           <Box sx={{ flexGrow: 0, marginLeft: 3 }}>
             <Tooltip title="Open settings">
@@ -152,7 +267,7 @@ function Navbar() {
               onClose={handleCloseUserMenu}
             >
               {settings.map((setting) => (
-                <MenuItem key={setting} onClick={handleCloseUserMenu}>
+                <MenuItem key={setting}>
                   <Typography textAlign="center">{setting}</Typography>
                 </MenuItem>
               ))}

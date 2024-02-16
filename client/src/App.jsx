@@ -4,6 +4,7 @@ import { About, Home, Login,Register} from './pages';
 import Footer from './components/footer';
 import DFood from './pages/DFood';
 import RFood from './pages/RFood';
+import Logout from './pages/Logout';
 
 const App = () => {
   return (
@@ -19,7 +20,7 @@ const AppContent = () => {
   const location = useLocation();
 
   // Check if the current location is '/login'
-  const isLoginPage = location.pathname === '/login' || location.pathname === "/register";
+  const isLoginPage = location.pathname === '/login' || location.pathname === "/register"|| location.pathname === "/logout";
 
   return (
     <>
@@ -33,6 +34,7 @@ const AppContent = () => {
         <Route path='/register' element={<Register />} />
         <Route path='/DFood' element={<DFood />} />
         <Route path='/RFood' element={<RFood />} />
+        <Route path='/logout' element={<Logout />} />
       </Routes>
       <Footer/>
     </>

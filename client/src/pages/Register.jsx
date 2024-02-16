@@ -1,4 +1,5 @@
-import * as React from 'react';
+import React ,{useState,useEffect}from 'react'
+import { useNavigate } from "react-router-dom";
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -13,6 +14,7 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Paper from '@mui/material/Paper';
+import HowToRegIcon from '@mui/icons-material/HowToReg'; //icon in submit
 import axios from "axios";
 
 function Copyright(props) {
@@ -33,6 +35,27 @@ function Copyright(props) {
 const defaultTheme = createTheme();
 
 export default function SignUp() {
+  const navigate = useNavigate();
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [user, setUser] = useState(null);
+  useEffect(() => {
+    axios.post('/api/users/isloggedin',{},{withCredentials: true})
+    .then(response => {
+      if(response.data.data.verifiedObj.verified)
+      { 
+        console.log(response.data.data.user);
+        setIsLoggedIn(true);
+        setUser(response.data.data.user);
+      }
+      else{
+        console.log("Not logged In");
+      }
+    })
+    .catch(error => {
+      console.error('Error:', error);
+    });
+  }, [])
+  
   const handleSubmit = async (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
@@ -44,11 +67,33 @@ export default function SignUp() {
     };
 
     try {
-      const response = await axios.post('/api/users/register', obj);
+      const response = await axios.post('/api/users/register', obj,{ withCredentials: true });
       console.log('Response:', response.data);
+      navigate("/login");
     } catch (error) {
       console.error('Error:',error.message);
     }
+  };
+
+  const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [error, setError] = useState('');
+  const [isButtonDisabled, setIsButtonDisabled] = useState(true);
+
+  const handlePasswordChange = (event) => {
+    setPassword(event.target.value);
+    // Reset error when password changes
+    setError('');
+    // Update button disabled state based on match
+    setIsButtonDisabled(event.target.value !== confirmPassword);
+  };
+
+  const handleConfirmPasswordChange = (event) => {
+    setConfirmPassword(event.target.value);
+    // Validate on every change
+    setError(event.target.value !== password ? 'Passwords must match' : '');
+    // Update button disabled state based on match
+    setIsButtonDisabled(event.target.value !== password);
   };
 
   return (
@@ -113,6 +158,7 @@ export default function SignUp() {
                   fullWidth
                   id="email"
                   label="Email Address"
+                  type="email"
                   name="email"
                   autoComplete="email"
                 />
@@ -126,6 +172,7 @@ export default function SignUp() {
                   type="password"
                   id="password"
                   autoComplete="new-password"
+                  onChange={handlePasswordChange}
                 />
               </Grid>
               <Grid item xs={12}>
@@ -137,6 +184,9 @@ export default function SignUp() {
                   type="password"
                   id="confirmPassword"
                   autoComplete="new-password"
+                  onChange={handleConfirmPasswordChange} //password match check
+                  error={!!error} 
+                  helperText={error}  
                 />
               </Grid>
               <Grid item xs={12}>
@@ -145,7 +195,7 @@ export default function SignUp() {
                   fullWidth
                   name="mobileNo"
                   label="Mobile No."
-                  type="number"
+                  type="tel"
                   id="mobileNo"
                 />
               </Grid>
@@ -155,8 +205,9 @@ export default function SignUp() {
               fullWidth
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
+              disabled={isButtonDisabled}
             >
-              Sign Up
+             Sign Up <HowToRegIcon sx={{marginLeft: 0.5,}}/> {/*icon*/}
             </Button>
             <Grid container justifyContent="center">
               <Grid item>
