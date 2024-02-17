@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useSpring, animated } from "react-spring";
 import { Card } from "flowbite-react";
 import { Button } from "@mui/material";
+import { Link } from 'react-router-dom';
 const Cards = ({ card_detail }) => {
   const [isHovered, setIsHovered] = useState(false);
 
@@ -33,9 +34,9 @@ const Cards = ({ card_detail }) => {
           </p>
           <Button
             sx={{ backgroundColor: "#4CAF50", color: "#FFFFFF" }} // Green color
-            variant="contained"
+            variant="contained" 
           >
-            {card_detail.btn}
+            <Link to={card_detail.link}>{card_detail.btn}</Link>  
           </Button>
         </div>
       </Card>

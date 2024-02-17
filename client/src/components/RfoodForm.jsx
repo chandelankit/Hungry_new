@@ -5,7 +5,7 @@ const RfoodForm = () => {
   return (
     <div className='flex justify-center items-center h-[70vh] w-3/4'>
       <div className='bg-slate-800 border border-slate-200 rounded-md p-8 shadow-lg backdrop-filter backdrop-blur-sm bg-opacity-30 relative w-full max-w-md '>
-        <h1 className='text-4xl text-white font-bold text-center mb-6'>Request Food</h1>
+        <h1 className='text-4xl text-white font-bold text-center mb-6'>Get Food</h1>
         <form action="">
           <div className='relative my-4'>
             <input type="text" className='block w-full py-2.5 px-4 text-sm text-white bg-transparent border-0 border-b-2 border-gray-100 appearance-none dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus-text-white focus:border-blue-600 peer' placeholder=""/>
@@ -41,11 +41,11 @@ const RfoodForm = () => {
 
           </div> */}
 
-          <div className='relative my-8'>
+          {/* <div className='relative my-8'>
             <textarea className='relative block w-full py-3.5 px-4 text-sm text-white bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus-text-white focus:border-blue-600 resize-none peer' rows="4" placeholder=""></textarea>
             <label htmlFor="email" className='absolute text-sm text-white duration-300 transform -translate-y-8 scale-75 top-6 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-3   peer-focus:scale:75 peer-focus:-translate-y-6'>Description</label>
 
-          </div>
+          </div> */}
 
           <div className="flex justify-between">
             <button type="button" className='w-1/2 ml-2 mr-4 text-lg rounded-full bg-white text-emerald-800 hover:bg-red-600 hover:text-white py-3 transition-colors duration-300'><Link to='/'>Cancel</Link></button>

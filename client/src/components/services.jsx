@@ -6,12 +6,14 @@ const Services = () => {
       text: "Help combat hunger by donating surplus food. Your contribution can make a significant impact in providing meals to those who need it most by donating food.",
       heading: "Donate Food",
       btn: "Donate Food",
+      link:"/DFood"
     },
     {
       url: "https://www.eatthis.com/wp-content/uploads/sites/4/2020/04/takeout-food.jpg?quality=82&strip=1",
       text: "Access nutritious meals through our platform, connecting you with donated food. Whether facing food insecurity or seeking assistance, we're here to support you in times of need.",
       heading: "Take Food",
       btn: "Get Food",
+      link: "/RFood"
     },
   ];
   return (
